@@ -198,16 +198,29 @@ public class Player {
 	private void stealRandomCard(Map<String, Player> otherPlayers)
 	{
 		System.out.println("\nFor a refresher, here are your opponents: ");
+		
 		for(Map.Entry<String, Player> entry : otherPlayers.entrySet())
 		{
 			System.out.println(entry.getValue().getName());
 		}
-		System.out.print("You discarded two of the same card, pick an opponent from above to steal from: "); 
-		String player = s.nextLine(); 
+		String player = "";
+		
+		do
+		{
+			System.out.print("You discarded two of the same card, pick an opponent from above to steal from: "); 
+			player = s.nextLine(); 
+		} while(InputChecker.checkInvalidOpponent(player, playerName));
+		
 		Deck flattenedHand = new Deck(otherPlayers.get(player).getHand());
 		flattenedHand.shuffleDeck();
-		System.out.print("\n"+player + " has " + flattenedHand.getDeckSize() + " cards. Pick a number from 1 to " + flattenedHand.getDeckSize() + ": ");
-		int number = Integer.parseInt(s.nextLine()); 
+		
+		int number = 0;
+		do 
+		{
+			System.out.print("\n"+player + " has " + flattenedHand.getDeckSize() + " cards. Pick a number from 1 to " + flattenedHand.getDeckSize() + ": ");
+			number = Integer.parseInt(s.nextLine()); 
+		} while(!InputChecker.checkBetweenBounds(1, flattenedHand.getDeckSize(), number));
+
 		String stolenCardType = flattenedHand.getCard(number-1).getType();			
 		takeCard(otherPlayers.get(player), stolenCardType);
 		System.out.println("\nSuccess! You stole a " + stolenCardType + " card from " + player + ".");
@@ -215,15 +228,24 @@ public class Player {
 
 	private void stealAnyCard(Map<String, Player> otherPlayers)
 	{
+		System.out.println("\nFor a refresher, here are your opponents: ");
+		
 		for(Map.Entry<String, Player> entry : otherPlayers.entrySet())
 		{
 			System.out.println(entry.getValue().getName());
 		}
 		System.out.println("\nYou discarded three of the same card, time to pick any card and steal it from anyone!");
-		System.out.print("\nSelect an opponent from above to steal from: ");
-		String player = s.nextLine(); 
+		String player = "";
+		
+		do
+		{
+			System.out.print("\nSelect an opponent from above to steal from: ");
+			player = s.nextLine(); 
+		} while(InputChecker.checkInvalidOpponent(player, playerName));
+		
 		System.out.print("\nSelect the type of card you'd like to steal: "); 
 		String type = s.nextLine();
+		
 		if(otherPlayers.get(player).getHand().containsKey(type))
 		{
 			takeCard(otherPlayers.get(player), type);
@@ -299,13 +321,20 @@ public class Player {
 				List<Card> defuseCards = hand.get("defuse");
 				defuseCards.remove(0); 
 				hand.put("defuse", defuseCards);
+				
 				if(hand.get("defuse").size() == 0)
 				{
 					hand.remove("defuse");
 				}
 				System.out.println("\nYou also get to put this exploding kitten back wherever you want :).");
-				System.out.print("\nPlease enter a location in the deck (0 (TOP) - " + (d.getDeckSize()-1) + " (BOTTOM)): ");
-				d.insertCard(Integer.parseInt(s.nextLine()), c); 
+				
+				int location = -1;
+				do 
+				{
+					System.out.print("\nPlease enter a location in the deck (0 (TOP) - " + (d.getDeckSize()-1) + " (BOTTOM)): ");
+					location = Integer.parseInt(s.nextLine());
+				} while(!InputChecker.checkBetweenBounds(0, (d.getDeckSize()-1), location));
+				d.insertCard(location, c); 
 			}
 			else
 			{

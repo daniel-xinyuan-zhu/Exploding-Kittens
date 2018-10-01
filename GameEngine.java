@@ -11,11 +11,12 @@ public class GameEngine {
 		s = new Scanner(System.in);
 		playerList = new ArrayList<Player>();
 		playersAlive = humans + computers; 
+		Player p; 
 		for(int i = 0; i < humans; i++)
 		{ 
 			System.out.println("\nPlayer " + (i+1) + ", what would you like your name to be? ");
 			String playerName = s.nextLine(); 
-			Player p = new Player(playerName); 
+			p = new Player(playerName); 
 			playerList.add(p); 
 		}
 		for(int i = 0; i < computers; i++)
@@ -23,6 +24,8 @@ public class GameEngine {
 			Computer c = new Computer("CPU " + (i+1)); 
 			playerList.add(c); 
 		}
+		System.out.println(playerList.size());
+		InputChecker.setPlayers(playerList);
 		d = new Deck(); 
 	} // end constructor
 
