@@ -33,7 +33,7 @@ public class Deck
 			cards.add(c); 
 		}
 		generateTwoValueCards(); 
-		//generateOneValueCards(); 
+		generateOneValueCards(); 
 	}
 
 	public void addExplodingKittens()

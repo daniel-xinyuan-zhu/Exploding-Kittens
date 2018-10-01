@@ -8,7 +8,9 @@ public class ExplodingKittens {
 		ExplodingKittens ek = new ExplodingKittens(); 
 		ek.setupGame(); 
 	}
-	public void setupGame()
+
+	// Private Methods
+	private void setupGame()
 	{
 		System.out.println("This game can be played with up to 4 players total. \n\n"); 
 		Scanner s = new Scanner(System.in);

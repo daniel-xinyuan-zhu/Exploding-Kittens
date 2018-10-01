@@ -4,14 +4,18 @@ public class GameEngine {
 	private Deck d; 
 	private List<Player> playerList;
 	private int playersAlive; 
+	private Scanner s; 
 
 	public GameEngine(int humans, int computers)
 	{
+		s = new Scanner(System.in);
 		playerList = new ArrayList<Player>();
 		playersAlive = humans + computers; 
 		for(int i = 0; i < humans; i++)
 		{ 
-			Player p = new Player("Player " + (i+1)); 
+			System.out.println("\nPlayer " + (i+1) + ", what would you like your name to be? ");
+			String playerName = s.nextLine(); 
+			Player p = new Player(playerName); 
 			playerList.add(p); 
 		}
 		for(int i = 0; i < computers; i++)
@@ -20,7 +24,7 @@ public class GameEngine {
 			playerList.add(c); 
 		}
 		d = new Deck(); 
-	}
+	} // end constructor
 
 	public void loadGame()
 	{
@@ -32,7 +36,6 @@ public class GameEngine {
 	{
 		while(playersAlive != 1)
 		{
-			
 			for(int i = 0; i < playerList.size(); i++)
 			{
 				Player p = playerList.get(i);
@@ -54,6 +57,7 @@ public class GameEngine {
 		System.out.println("\n\n\n"+playerList.get(0).getName() + " is the winner!");
 	}
 
+	// Private Methods:
 	private void dealInitialCards()
 	{
 		// Deal defuse cards first 

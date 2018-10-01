@@ -4,7 +4,8 @@ import javafx.util.Pair;
 
 public class Player {
 	public String playerName;
-	public TreeMap <String, List<Card>> hand;  
+	public TreeMap <String, List<Card>> hand;
+	public Set<String> oneValueCards; 
 	private Scanner s; 
 	
 	public Player(String name)
@@ -12,11 +13,20 @@ public class Player {
 		s = new Scanner(System.in);
 		playerName = name; 
 		hand = new TreeMap <>(); 
+		oneValueCards = new HashSet<>();
+		oneValueCards.add("shuffle");
+		oneValueCards.add("see the future");
+		oneValueCards.add("skip turn");
 	}
 
 	public TreeMap<String, List<Card>> getHand()
 	{
 		return hand;
+	}
+
+	public String getName()
+	{
+		return playerName;
 	}
 
 	public void setHand(String cardType, List<Card> cardList)
@@ -42,7 +52,6 @@ public class Player {
 
 	public boolean takeTurn(Deck d, Map<String, Player> otherPlayers)
 	{
-		//Scanner s = new Scanner(System.in);
 		boolean skipTurn = false; 
 		boolean endTurn = false; 
 		hideCards(); 
@@ -56,11 +65,16 @@ public class Player {
 			String cardChoice = "";
 			while(parseCardInput(cardChoice) == null)
 			{
-				System.out.println("\nWhat cards and how many of them would you like to play? (i.e. \"2x potato cat\") Or, you can end your turn by typing \"end\"");
+				System.out.println("\nYou may play one or more cards by entering them here (i.e. \"2x potato cat\"). You can end your turn by typing \"end\". Or, you can type \"help\" for a list of possible moves.");
 				cardChoice = s.nextLine(); 
 				if(cardChoice.equals("end"))
 				{
 					endTurn = true;
+					break;
+				}
+				if(cardChoice.equals("help"))
+				{
+					showPossibleMoves(); 
 					break;
 				}
 				if(parseCardInput(cardChoice) == null)
@@ -91,10 +105,35 @@ public class Player {
 				return false; 
 			} 
 		}
-		System.out.print("\nYou opted to skip your turn. You will not draw a card. Please press enter to finish your turn : ");
-		String space = s.nextLine();
+		else 
+		{
+			System.out.print("\nYou opted to skip your turn. You will not draw a card. Please press enter to finish your turn : ");
+			String space = s.nextLine();
+		}
 		return true; 
 	}
+
+	private void showPossibleMoves()
+	{
+		System.out.println("\nHere is a list of possible cards you can play:\n");
+		for(Map.Entry<String, List<Card>> entry : hand.entrySet())
+		{
+			if(oneValueCards.contains(entry.getKey()))
+			{
+				System.out.println("You can play 1x " + entry.getKey() + " card.");
+			}
+			if(entry.getValue().size() >= 2)
+			{
+				System.out.println("You can play 2x " + entry.getKey() + " cards to steal a random card from any opponent.");
+			}
+			if(entry.getValue().size() >= 3)
+			{
+				System.out.println("You can play 3x " + entry.getKey() + " cards to steal a card of your choice from any opponent (if they have it).");
+			}
+		}
+		System.out.println();
+	}
+
 
 	private Pair<Boolean, Boolean> playCards(Pair<String, Integer> cardsToPlay, Deck d, Map<String, Player> otherPlayers, boolean endTurn)
 	{
@@ -137,10 +176,12 @@ public class Player {
 		switch (cardType)
 		{
 			case "shuffle":
+				System.out.println("\n The deck has been re-shuffled!"); 
 				d.shuffleDeck();
 			break; 
 			case "see the future":
 				int cardNumber = 1; 
+				System.out.println("\nYou asked to see the future, here it is: ");
 				for(Card c : d.viewTop(3))
 				{
 					System.out.println("Card " + cardNumber + ": " + c.getType()); 
@@ -156,12 +197,12 @@ public class Player {
 
 	private void stealRandomCard(Map<String, Player> otherPlayers)
 	{
-		//Scanner s = new Scanner(System.in);
+		System.out.println("\nFor a refresher, here are your opponents: ");
 		for(Map.Entry<String, Player> entry : otherPlayers.entrySet())
 		{
 			System.out.println(entry.getValue().getName());
 		}
-		System.out.print("\nYou discarded two of the same card, pick an opponent from above to steal from: "); 
+		System.out.print("You discarded two of the same card, pick an opponent from above to steal from: "); 
 		String player = s.nextLine(); 
 		Deck flattenedHand = new Deck(otherPlayers.get(player).getHand());
 		flattenedHand.shuffleDeck();
@@ -169,11 +210,11 @@ public class Player {
 		int number = Integer.parseInt(s.nextLine()); 
 		String stolenCardType = flattenedHand.getCard(number-1).getType();			
 		takeCard(otherPlayers.get(player), stolenCardType);
+		System.out.println("\nSuccess! You stole a " + stolenCardType + " card from " + player + ".");
 	}
 
 	private void stealAnyCard(Map<String, Player> otherPlayers)
 	{
-		//Scanner s = new Scanner(System.in);
 		for(Map.Entry<String, Player> entry : otherPlayers.entrySet())
 		{
 			System.out.println(entry.getValue().getName());
@@ -186,6 +227,7 @@ public class Player {
 		if(otherPlayers.get(player).getHand().containsKey(type))
 		{
 			takeCard(otherPlayers.get(player), type);
+			System.out.println("\nSuccess! You stole a " + type + " card from " + player + "."); 
 		}
 		else
 		{
@@ -224,12 +266,7 @@ public class Player {
 		return null;
 	}
 
-	public String getName()
-	{
-		return playerName;
-	}
-
-	public void showCards()
+	private void showCards()
 	{
 		System.out.println("\nHere's an updated list of your cards: \n");
 		int cardNumber = 1; 
@@ -249,9 +286,8 @@ public class Player {
 		System.out.flush();
 	}
 
-	public boolean endTurn(Deck d)
+	private boolean endTurn(Deck d)
 	{
-		//Scanner s = new Scanner(System.in);
 		Card c = d.drawCard();
 		if(c.getType().equals("exploding kitten"))
 		{
