@@ -5,7 +5,6 @@ public class InputChecker
 	private static Set<String> playerList; 
 	public InputChecker()
 	{
-		System.out.println("yeah");
 		playerList = new HashSet<String>(); 
 	}
 
@@ -26,6 +25,4 @@ public class InputChecker
 	{
 		return number >= lower && number <= upper;
 	}
-
-	
 }

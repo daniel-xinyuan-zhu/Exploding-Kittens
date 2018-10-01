@@ -58,7 +58,6 @@ public class Player {
 		System.out.println("It is now " + playerName + "'s turn!");
 		System.out.print("Please press enter to start your turn: ");
 		String input = s.nextLine();
-		d.printDeck();
 		showCards(); 
 		while(!endTurn)
 		{
@@ -79,7 +78,7 @@ public class Player {
 				}
 				if(parseCardInput(cardChoice) == null)
 				{
-					System.out.println("\nThat did not seem to be a valid combo . . . Try again?");
+					System.out.println("\nThat did not seem to be a valid move . . . Try again?");
 				}
 				else
 				{
@@ -176,7 +175,7 @@ public class Player {
 		switch (cardType)
 		{
 			case "shuffle":
-				System.out.println("\n The deck has been re-shuffled!"); 
+				System.out.println("\nThe deck has been re-shuffled!"); 
 				d.shuffleDeck();
 			break; 
 			case "see the future":
@@ -207,7 +206,7 @@ public class Player {
 		
 		do
 		{
-			System.out.print("You discarded two of the same card, pick an opponent from above to steal from: "); 
+			System.out.print("\n\nYou discarded two of the same card, pick an opponent from above to steal from: "); 
 			player = s.nextLine(); 
 		} while(InputChecker.checkInvalidOpponent(player, playerName));
 		
@@ -234,7 +233,7 @@ public class Player {
 		{
 			System.out.println(entry.getValue().getName());
 		}
-		System.out.println("\nYou discarded three of the same card, time to pick any card and steal it from anyone!");
+		System.out.println("\n\nYou discarded three of the same card, time to pick any card and steal it from anyone!");
 		String player = "";
 		
 		do
@@ -267,7 +266,7 @@ public class Player {
 
 	private Pair<String, Integer> parseCardInput(String cardChoice)
 	{
-		if(cardChoice.length() > 4)
+		if(cardChoice.length() > 4 && cardChoice.indexOf("x ") != -1)
 		{
 			int quantity = Integer.parseInt(cardChoice.substring(0, cardChoice.indexOf('x')));
 			if(quantity < 1 || quantity > 3)
@@ -313,7 +312,7 @@ public class Player {
 		Card c = d.drawCard();
 		if(c.getType().equals("exploding kitten"))
 		{
-			System.out.println("\nBOOM! YOU DREW AN EXPLODING KITTEN\n"); 
+			System.out.println("\nBOOM! YOU DREW AN EXPLODING KITTEN!!\n"); 
 			if(hand.containsKey("defuse"))
 			{
 				System.out.print("Fortunately, you still have a defuse. Press enter to continue by using a defuse: "); 

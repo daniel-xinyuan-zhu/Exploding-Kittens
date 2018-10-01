@@ -15,20 +15,14 @@ public class ExplodingKittens {
 		System.out.println("This game can be played with up to 4 players total. \n\n"); 
 		Scanner s = new Scanner(System.in);
 		int numHumans = 0; 
-		while (numHumans <= 0 || numHumans > 4)
+		while (numHumans < 2)
 		{
 			System.out.print("How many human players will be playing today? ");
 			numHumans = Integer.parseInt(s.nextLine());
 		}
-		int numComputers = 0;
-		do
-		{
-			System.out.print("\nHow many computer players will be playing today? ");
-			numComputers = Integer.parseInt(s.nextLine()); 
-		} while(numComputers + numHumans > 4 || numComputers + numHumans < 2);
 		System.out.println("\nPerfect! Let's get started!\n");
 		InputChecker ic = new InputChecker();
-		GameEngine ge = new GameEngine(numHumans, numComputers); 
+		GameEngine ge = new GameEngine(numHumans); 
 		ge.loadGame(); 
 		ge.startGame(); 
 	}

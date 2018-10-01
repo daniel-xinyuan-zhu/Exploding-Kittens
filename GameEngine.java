@@ -6,11 +6,11 @@ public class GameEngine {
 	private int playersAlive; 
 	private Scanner s; 
 
-	public GameEngine(int humans, int computers)
+	public GameEngine(int humans)
 	{
 		s = new Scanner(System.in);
 		playerList = new ArrayList<Player>();
-		playersAlive = humans + computers; 
+		playersAlive = humans; 
 		Player p; 
 		for(int i = 0; i < humans; i++)
 		{ 
@@ -19,12 +19,6 @@ public class GameEngine {
 			p = new Player(playerName); 
 			playerList.add(p); 
 		}
-		for(int i = 0; i < computers; i++)
-		{
-			Computer c = new Computer("CPU " + (i+1)); 
-			playerList.add(c); 
-		}
-		System.out.println(playerList.size());
 		InputChecker.setPlayers(playerList);
 		d = new Deck(); 
 	} // end constructor
@@ -75,7 +69,6 @@ public class GameEngine {
 		{
 			for(int i = 0; i < 4; i++)
 			{
-				System.out.println("CARD DEALT");
 				Card c = d.drawCard();
 				p.addCard(c); 
 			}

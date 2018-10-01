@@ -26,7 +26,6 @@ public class Deck
 
 	public void generateDeck()
 	{
-		System.out.println("GENERATING CARDS");
 		for(int i = 0; i < 6; i++)
 		{
 			Card c = new Card("defuse", 3); 
@@ -50,14 +49,12 @@ public class Deck
 	{
 		//Fisher Yates Algorithm 
 		int n = cards.size();
-		System.out.println("BEFORE size: "+n);
         Random random = new Random();
         for (int i = 0; i < n; i++) 
         {
             int randomValue = i + random.nextInt(n - i);
             Collections.swap(cards, i, randomValue); 
         }
-        System.out.println("AFTER SIZE: "+cards.size());
 	}
 
 	public void insertCard(int index, Card c)
@@ -92,7 +89,6 @@ public class Deck
 
 	public void printDeck()
 	{
-		System.out.println("Total Cards: " + cards.size());
 		for(Card c : cards)
 		{
 			System.out.println(c.getType());
