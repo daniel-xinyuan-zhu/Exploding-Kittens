@@ -23,7 +23,8 @@ public class ExplodingKittens {
 		{
 			System.out.print("\nHow many computer players will be playing today? ");
 			numComputers = Integer.parseInt(s.nextLine()); 
-		} while(numComputers + numHumans > 4 || numComuters + numHumans < 2);
+		} while(numComputers + numHumans > 4 || numComputers + numHumans < 2);
+		
 		System.out.println("\nPerfect! Let's get started!\n");
 		GameEngine ge = new GameEngine(numHumans, numComputers); 
 		ge.loadGame(); 
